@@ -8,11 +8,12 @@ let transactionChart, balanceChart, savingsChart, expenseCategoryChart, addition
 let budgetVsActualChart;
 let allTransactions = [];
 
-// Fetching data from the GitHub repository
-fetch('https://raw.githubusercontent.com/yourusername/yourrepo/main/data.json')
+fetch('https://raw.githubusercontent.com/RadkaKotulak/Wealth-Wise/main/data.json')
   .then(response => response.json())
   .then(data => {
-    // Display the transactions on the page
+    console.log(data); // Check the data in the browser console
+
+    // Use the data to populate your website
     const transactionTable = document.getElementById('transactionTable');
     data.transactions.forEach(transaction => {
       const row = document.createElement('tr');
@@ -27,6 +28,8 @@ fetch('https://raw.githubusercontent.com/yourusername/yourrepo/main/data.json')
       `;
       transactionTable.appendChild(row);
     });
+  })
+  .catch(error => console.error('Error fetching data:', error));
 
     // Display budget data
     document.getElementById('budgetHousing').textContent = `${data.budget.categoryAmounts.housing} €`;
