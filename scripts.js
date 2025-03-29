@@ -8,6 +8,45 @@ let transactionChart, balanceChart, savingsChart, expenseCategoryChart, addition
 let budgetVsActualChart;
 let allTransactions = [];
 
+// Fetching data from the GitHub repository
+fetch('https://raw.githubusercontent.com/yourusername/yourrepo/main/data.json')
+  .then(response => response.json())
+  .then(data => {
+    // Display the transactions on the page
+    const transactionTable = document.getElementById('transactionTable');
+    data.transactions.forEach(transaction => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${transaction.id}</td>
+        <td>${transaction.description}</td>
+        <td>${transaction.amount} €</td>
+        <td>${transaction.date}</td>
+        <td>${transaction.type}</td>
+        <td>${transaction.category}</td>
+        <td><button onclick="editTransaction(${transaction.id})">Edit</button> <button onclick="deleteTransaction(${transaction.id})">Delete</button></td>
+      `;
+      transactionTable.appendChild(row);
+    });
+
+    // Display budget data
+    document.getElementById('budgetHousing').textContent = `${data.budget.categoryAmounts.housing} €`;
+    document.getElementById('budgetGroceries').textContent = `${data.budget.categoryAmounts.groceries} €`;
+    document.getElementById('budgetTransport').textContent = `${data.budget.categoryAmounts.transport} €`;
+    document.getElementById('budgetEntertainment').textContent = `${data.budget.categoryAmounts.entertainment} €`;
+    document.getElementById('budgetHealth').textContent = `${data.budget.categoryAmounts.health} €`;
+    document.getElementById('budgetOther').textContent = `${data.budget.categoryAmounts.otherExpenses} €`;
+
+    // Display goal tracking data
+    document.getElementById('totalIncome').textContent = `${data.goalTracking.totalIncome} €`;
+    document.getElementById('totalExpense').textContent = `${data.goalTracking.totalExpense} €`;
+    document.getElementById('balance').textContent = `${data.goalTracking.balance} €`;
+    document.getElementById('totalSavings').textContent = `${data.goalTracking.totalSavings} €`;
+
+    // Update the finance goal percentage
+    const percentage = (data.goalTracking.totalSavings / data.goalTracking.financeGoal) * 100;
+    document.getElementById('percentage').textContent = `${percentage.toFixed(2)}% completed`;
+  })
+  .catch(error => console.error('Error fetching data:', error));
 
 
 // Load transactions from localStorage
